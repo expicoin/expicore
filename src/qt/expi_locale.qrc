@@ -1,0 +1,30 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/translations">
+        <file alias="bg">locale/expi_bg.qm</file>
+        <file alias="ca">locale/expi_ca.qm</file>
+        <file alias="cs">locale/expi_cs.qm</file>
+        <file alias="da">locale/expi_da.qm</file>
+        <file alias="de">locale/expi_de.qm</file>
+        <file alias="en">locale/expi_en.qm</file>
+        <file alias="en_US">locale/expi_en_US.qm</file>
+        <file alias="es">locale/expi_es.qm</file>
+        <file alias="fi">locale/expi_fi.qm</file>
+        <file alias="fr_FR">locale/expi_fr_FR.qm</file>
+        <file alias="hr">locale/expi_hr.qm</file>
+        <file alias="it">locale/expi_it.qm</file>
+        <file alias="ja">locale/expi_ja.qm</file>
+        <file alias="ko_KR">locale/expi_ko_KR.qm</file>
+        <file alias="nl">locale/expi_nl.qm</file>
+        <file alias="pl">locale/expi_pl.qm</file>
+        <file alias="pt">locale/expi_pt.qm</file>
+        <file alias="pt_BR">locale/expi_pt_BR.qm</file>
+        <file alias="ro_RO">locale/expi_ro_RO.qm</file>
+        <file alias="ru">locale/expi_ru.qm</file>
+        <file alias="sk">locale/expi_sk.qm</file>
+        <file alias="sv">locale/expi_sv.qm</file>
+        <file alias="tr">locale/expi_tr.qm</file>
+        <file alias="uk">locale/expi_uk.qm</file>
+        <file alias="zh_CN">locale/expi_zh_CN.qm</file>
+        <file alias="zh_TW">locale/expi_zh_TW.qm</file>
+    </qresource>
+</RCC>

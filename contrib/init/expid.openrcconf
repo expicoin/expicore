@@ -1,0 +1,26 @@
+# /etc/conf.d/expid: config file for /etc/init.d/expid
+
+# Config file location
+#BITCOIND_CONFIGFILE="/etc/expi/expi.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOIND_USER)
+#BITCOIND_PIDDIR="/var/run/expid"
+
+# What filename to give the pidfile
+#BITCOIND_PIDFILE="${BITCOIND_PIDDIR}/expid.pid"
+
+# Where to write expid data (be mindful that the blockchain is large)
+#BITCOIND_DATADIR="/var/lib/expid"
+
+# User and group to own expid process
+#BITCOIND_USER="expi"
+#BITCOIND_GROUP="expi"
+
+# Path to expid executable
+#BITCOIND_BIN="/usr/bin/expid"
+
+# Nice value to run expid under
+#BITCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+BITCOIND_OPTS=""

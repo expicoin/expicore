@@ -1,0 +1,11 @@
+[Protocol]
+exec=expi-qt '%u'
+protocol=expi
+input=none
+output=none
+helper=true
+listing=
+reading=false
+writing=false
+makedir=false
+deleting=false

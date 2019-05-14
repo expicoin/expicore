@@ -1,0 +1,26 @@
+[Unit]
+Description=expi's distributed currency daemon
+After=network.target
+
+[Service]
+User=expi
+Group=expi
+
+Type=forking
+PIDFile=/var/lib/expid/expid.pid
+
+ExecStart=/usr/bin/expid -daemon -pid=/var/lib/expid/expid.pid \
+          -conf=/etc/expi/expi.conf -datadir=/var/lib/expid
+
+ExecStop=-/usr/bin/expi-cli -conf=/etc/expi/expi.conf \
+         -datadir=/var/lib/expid stop
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

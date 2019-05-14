@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=EXPi
+Comment=EXPi P2P Cryptocurrency
+Comment[fr]=EXPi, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=EXPi, eşten eşe kriptografik sanal para birimi
+Exec=expi-qt %u
+Terminal=false
+Type=Application
+Icon=expi128
+MimeType=x-scheme-handler/expi;
+Categories=Office;Finance;
