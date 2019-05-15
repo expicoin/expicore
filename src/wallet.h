@@ -302,7 +302,7 @@ public:
         vDisabledAddresses.clear();
 
         //Auto Combine Dust - EXPi uses autocomibe dust with 20 COINS minimum
-        fCombineDust = true;
+        fCombineDust = false;
         nAutoCombineThreshold = 20;
     }
 
