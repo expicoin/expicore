@@ -1248,6 +1248,28 @@ bool AppInit2(boost::thread_group& threadGroup)
     BOOST_FOREACH (string strDest, mapMultiArgs["-seednode"])
         AddOneShot(strDest);
 
+    
+    const vector<CDNSSeedData>& vSeeds = Params().DNSSeeds();
+    int found=0;
+    
+    BOOST_FOREACH (const CDNSSeedData& seed, vSeeds) {
+        if (HaveNameProxy()) {
+            mapMultiArgs["-addnode"].push_back(seed.host);
+        } else {
+            vector<CNetAddr> vIPs;
+            vector<CAddress> vAdd;
+            if (LookupHost(seed.host.c_str(), vIPs)) {
+                BOOST_FOREACH (CNetAddr& ip, vIPs) {
+                    int nOneDay = 24 * 3600;
+                    CAddress addr = CAddress(CService(ip, Params().GetDefaultPort()));
+                    addr.nTime = GetTime() - 3 * nOneDay - GetRand(4 * nOneDay); // use a random age between 3 and 7 days old
+                    mapMultiArgs["-addnode"].push_back(addr.ToString());
+                    found++;
+                }
+            }
+        }
+    }
+
 #if ENABLE_ZMQ
     pzmqNotificationInterface = CZMQNotificationInterface::CreateWithArguments(mapArgs);
 
