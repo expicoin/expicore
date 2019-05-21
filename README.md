@@ -1,6 +1,6 @@
 ![EXPI Logo](https://i.imgur.com/jJkSAsh.png)
 
-[WEBSITE](https://expi.life) | [BITCOINTALK](https://bitcointalk.org/index.php?topic=5142574) | [WHITEPAPER](https://www.docdroid.net/TuJmos2/expiwp-v10.pdf) | [EXPLORER](https://explorer.expi.life/)
+[WEBSITE](https://expi.life) | [BITCOINTALK](https://bitcointalk.org/index.php?topic=5142574) | [WHITEPAPER](https://expi.world/EXPiwp-v1.0.pdf) | [EXPLORER](https://explorer.expi.life/)
 -------------|-------------|-------------|-------------
 
 <a href="https://discord.gg/2wTsbjq"><img src="https://img.shields.io/discord/550677956943413258.svg?color=7289DA&logo=discord&logoColor=7289DA&style=social" alt="Discord server" /></a> <a href="https://twitter.com/intent/follow?screen_name=EXPICOIN"><img src="https://img.shields.io/twitter/follow/EXPICOIN.svg?style=social" alt="follow on Twitter"></a>
