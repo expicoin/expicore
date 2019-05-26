@@ -54,6 +54,8 @@ using namespace libzerocoin;
 
 #define MAX_BLOCK_TXS 200
 
+#define FORK_HEIGHT_102 30000
+
 // 6 comes from OPCODE (1) + vch.size() (1) + BIGNUM size (4)
 #define SCRIPT_OFFSET 6
 // For Script size (BIGNUM/Uint256 size)
@@ -2173,13 +2175,13 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
             return 0;
     }
 	
-	// 80% for Masternodes
+	// 0/85/95% for Masternodes
     if (nHeight <= Params().LAST_POW_BLOCK()) {
 	      ret = blockValue  / 100 * 0;
-	} else if (nHeight > 1) {
+	} else if (nHeight < FORK_HEIGHT_102) {
           ret = blockValue  / 100 * 85; //85% for MN
-		
-	}
+	} else
+		  ret = blockValue / 100 * 95; //95% for MN
 			
 	
     return ret;
@@ -2557,10 +2559,11 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
                 if (coins->vout.size() < out.n + 1)
                     coins->vout.resize(out.n + 1);
                 coins->vout[out.n] = undo.txout;
-                
-                //fix for fake PoS
-                //erase the spent input
-                mapStakeSpent.erase(out);
+
+				if(pindex->nHeight < FORK_HEIGHT_102 && !IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT)) {
+					//erase the spent input
+					mapStakeSpent.erase(out);
+				}
             }
         }
     }
@@ -3040,26 +3043,27 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     if (fTxIndex)
         if (!pblocktree->WriteTxIndex(vPos))
             return state.Abort("Failed to write transaction index");
-            
-            
-    //fix fake PoS
-    // add new entries
-	for (const CTransaction tx:block.vtx) {
-		if (tx.IsCoinBase())
-			continue;
-		for (const CTxIn in: tx.vin) {
-			LogPrint("map", "mapStakeSpent: Insert %s | %u\n", in.prevout.ToString(), pindex->nHeight);
-			mapStakeSpent.insert(std::make_pair(in.prevout, pindex->nHeight));
-		}
-	}
 
-	// delete old entries
-	for (auto it = mapStakeSpent.begin(); it != mapStakeSpent.end();) {
-		if (it->second < pindex->nHeight - Params().MaxReorganizationDepth()) {
-			LogPrint("map", "mapStakeSpent: Erase %s | %u\n", it->first.ToString(), it->second);
-			it = mapStakeSpent.erase(it);
-		} else {
-			it++;
+    // add new entries
+    
+    if(pindex->nHeight < FORK_HEIGHT_102 && !IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT)) {
+		for (const CTransaction tx:block.vtx) {
+			if (tx.IsCoinBase())
+				continue;
+			for (const CTxIn in: tx.vin) {
+				LogPrint("map", "mapStakeSpent: Insert %s | %u\n", in.prevout.ToString(), pindex->nHeight);
+				mapStakeSpent.insert(std::make_pair(in.prevout, pindex->nHeight));
+			}
+		}
+
+		// delete old entries
+		for (auto it = mapStakeSpent.begin(); it != mapStakeSpent.end();) {
+			if (it->second < pindex->nHeight - Params().MaxReorganizationDepth()) {
+				LogPrint("map", "mapStakeSpent: Erase %s | %u\n", it->first.ToString(), it->second);
+				it = mapStakeSpent.erase(it);
+			} else {
+				it++;
+			}
 		}
 	}
 
@@ -4255,9 +4259,9 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
     int nHeight = pindex->nHeight;
     
     //fix fake PoS
-    if (block.IsProofOfStake()) {
+    if (block.IsProofOfStake() && (nHeight < FORK_HEIGHT_102 && !IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT))) {
 		LOCK(cs_main);
-
+		
 		CCoinsViewCache coins(pcoinsTip);
 
 		if (!coins.HaveInputs(block.vtx[1])) {
@@ -6350,7 +6354,10 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 //       it was the one which was commented out
 int ActiveProtocol()
 {
-	return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
+	if(chainActive.Height() > FORK_HEIGHT_102 || IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT))
+		return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
+	else
+		return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
 }
 
 // requires LOCK(cs_vRecvMsg)
